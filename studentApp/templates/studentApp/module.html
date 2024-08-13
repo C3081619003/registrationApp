@@ -1,0 +1,36 @@
+{% extends 'studentApp/base.html' %}
+
+{% block title %}Modules{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">List of Courses and Modules</h1>
+
+    {% for course in courses %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>{{ course.name }}</h2>
+            <h4>Code: {{ course.code }}</h4>
+            <h4>{{ course.level }} - {{ course.duration }}</h4>
+        </div>
+        <div class="card-body">
+            <h3>Modules:</h3>
+            <ul class="list-group">
+                {% for module in course.modules %}
+                <li class="list-group-item">
+                    <h5>{{ module.name }}</h5>
+                    <form method="post" action="{% url 'register_module' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="module_id" value="{{ module.id }}">
+                        <button type="submit" class="btn btn-primary btn-sm">Register for this module</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% empty %}
+    <p>No courses are available at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}
